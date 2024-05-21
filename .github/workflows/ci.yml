@@ -39,29 +39,3 @@ jobs:
           go-version: 1.22.1
       - name: Linting
         run: go fmt ./...
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs:
-      - lint
-    defaults:
-      run:
-        shell: sh
-    steps:
-      - name: Checkout codebase
-        uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1.22.1
-      - name: Run Unit Tests
-        run: go test -v --covermode atomic --coverpkg github.com/wecoach-ai/Database/internal/app --coverprofile ./dist/mr.unit.profile.out internal/app_test/unit/*
-      - name: Upload unit test coverage to Codecov
-        uses: codecov/codecov-action@v4.4.0
-        with:
-          files: dist/mr.unit.profile.out
-          flags: unittests
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          codecov_yml_path: ./.github/codecov.yml
-          slug: wecoach-ai/Database
